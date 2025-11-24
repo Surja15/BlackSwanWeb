@@ -1,6 +1,6 @@
 # 🦢 Black Swan Antivirus — Web Utilities Edition
 
-# URL: https://surja15.github.io/BlackSwanWeb/
+# URL: [https://surja15.github.io/BlackSwanWeb/](https://subh12m.github.io/BlackSwanWeb/)
 
 **Black Swan Antivirus** is a lightweight, fast, and customizable cybersecurity tool built as a final-year project. It not only delivers a powerful real-time scanning engine but also includes useful web utilities like a **QR Code generator**, **secure password generator** and a **URL safety checker**, all packaged into a clean, responsive web interface.
 

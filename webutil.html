@@ -1,556 +1,782 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-  <meta charset="UTF-8" />
-  <title>URL & Password Tool</title>
-  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&display=swap" rel="stylesheet" />
-  <style>
-    :root {
-  --primary: #000000;
-  --secondary: #111111;
-  --accent: #1a1a1a;
-  --highlight: #ff4d4d; /* was pinkish, now light red */
-  --white: #ffffff;
-}
-    .popup {
-      background-color: var(--highlight); /* this will now be red-ish */
-    }
-    body {
-      margin: 0;
-      font-family: 'Montserrat', sans-serif;
-      background: radial-gradient(ellipse at bottom, #0d0d0d 0%, #000 100%);
-      color: #fff;
-      overflow-x: hidden;
-    }
-
-   h2 {
-  color: #ff4d4d;  /* Light red */
-}
-    .star {
-      position: absolute;
-      width: 2px;
-      height: 2px;
-      background: white;
-      border-radius: 50%;
-      opacity: 0.3;
-      animation: twinkle 2s infinite alternate;
-    }
-    @keyframes twinkle {
-      0% {
-        opacity: 0.1;
-        transform: scale(0.9);
-      }
-      100% {
-        opacity: 1;
-        transform: scale(1.1);
-      }
-    }
-
-    .navbar {
-      background: rgba(255, 255, 255, 0.05);
-      border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-      backdrop-filter: blur(12px);
-      -webkit-backdrop-filter: blur(12px);
-      color: #fff;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      padding: 12px 24px;
-      height: 42px;
-      box-shadow: 0 2px 20px rgba(255, 20, 147, 0.1);
-      margin-bottom: 3rem;
-      position: sticky;
-      top: 0;
-      z-index: 100;
-    }
-
-    .navbar .left {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      font-size: 1.2rem;
-      font-weight: 700;
-    }
-    /*hover color effect (white to #e94560) for the top navigation links */
-    .navbar .right a {
-      color: white;
-      text-decoration: none;
-      margin-left: 20px;
-      font-weight: 500;
-      transition: color 0.3s ease;
-    }
-
-    .navbar .right a:hover {
-      color: #e94560;
-    }
-
-    .glassbar button {
-      background: var(--highlight);
-      color: var(--white);
-      border: none;
-      border-radius: 30px;
-      padding: 12px 0;
-      font-size: 1.1rem;
-      font-weight: 600;
-      width: 100%;
-      cursor: pointer;
-      margin-bottom: 12px;
-      transition: background 0.3s, box-shadow 0.3s;
-    }
-
-    .glassbar button:hover {
-      background: #ff5a7a;
-      box-shadow: 0 0 12px rgba(233, 69, 96, 0.5);
-    }
-
-    input[type="text"],
-    input[type="range"],
-    button,
-    label {
-      padding: 10px;
-      font-size: 16px;
-      width: 100%;
-      margin-bottom: 15px;
-      border-radius: 10px;
-      border: none;
-    }
-
-    input[type="text"] {
-      background: #1c1c1c;
-      color: #ffb6c1;
-    }
-
-    button {
-      background: #ff2e88;
-      color: #fff;
-      cursor: pointer;
-      transition: all 0.3s;
-    }
-
-    button:hover {
-      background: #ff69b4;
-      box-shadow: 0 0 10px rgba(255, 105, 180, 0.5);
-    }
-    .url-checker-box button {
-      background: var(--highlight);
-      color: var(--white);
-      border: none;
-      border-radius: 30px; /*  This makes the button rounded */
-      padding: 12px 0; /* This gives height and vertical space */
-      font-size: 1.1rem;
-      font-weight: 600;
-      width: 100%; /*  This ensures full width (no shrinking) */
-      cursor: pointer;
-      margin-bottom: 12px;
-      transition: background 0.3s, box-shadow 0.3s;
-    }
-
-    .url-checker-box button:hover {
-      background: #ff5a7a; /* slightly lighter pinkish highlight */
-      box-shadow: 0 0 12px rgba(233, 69, 96, 0.5);
-    }
-.glassbar,
-.url-checker-box {
-  background: rgba(255, 255, 255, 0.05); /* translucent background */
-  backdrop-filter: blur(1px);
-  -webkit-backdrop-filter: blur(1px);
-  border: 1px solid rgba(255, 255, 255, 0.1); /* subtle border */
-  box-shadow: 0 0 20px rgba(233, 69, 96, 0.2); /* soft glow */
-  border-radius: 20px;
-  padding: 24px;
-  width: 600px;
-  max-width: 95vw;
-  box-sizing: border-box;
-}
-.panel {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  height: 100vh;
-  padding: 2rem;
-  width: 100%;
-  max-width: 100vw;
-  box-sizing: border-box;
-}
-
-
-    .result {
-      padding: 15px;
-      border-radius: 10px;
-      margin-top: 10px;
-    }
-
-    .safe {
-      background-color: #1e3b30;
-      color: #a2e3d4;
-    }
-
-    .potential {
-      background-color: #4e3d05;
-      color: #ffe6a1;
-    }
-
-    .unsafe {
-      background-color: #5a1c28;
-      color: #f2a9b6;
-    }
-
-    .section {
-      margin-bottom: 6rem;
-      animation: fadeIn 1.2s ease-in;
-      scroll-snap-align: start;
-    }
-    .checkbox-group:hover {
-      gap: 14px;
-      transform: translateX(5px);
-    }
-    .checkbox-group {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      margin-bottom: 12px;
-      transition: gap 0.3s ease;
-    }
-
-    .checkbox-group input[type="checkbox"] {
-      transform: scale(1.2);
-      accent-color: #ff2e88;
-      cursor: pointer;
-    }
-
-    .checkbox-group label {
-      margin: 0;
-      width: auto;
-      display: flex;
-      align-items: center;
-      font-size: 15px;
-    }
-    .section {
-      margin-bottom: 6rem; /* more vertical space */
-      animation: fadeIn 1.2s ease-in;
-    }
-
-    @keyframes fadeIn {
-      0% {
-        opacity: 0;
-        transform: translateY(20px);
-      }
-      100% {
-        opacity: 1;
-        transform: translateY(0);
-      }
-    }
-    /* === FULLSCREEN SECTIONS WITH SCROLL SNAP === */
-    html,
-    body {
-      height: 100%;
-      scroll-snap-type: y mandatory;
-      overflow-y: scroll;
-    }
-
-    .panel {
-      height: 100vh;
-      scroll-snap-align: start;
-      display: flex;
-      justify-content: center;
-      align-items: center; /* centers vertically */
-      padding: 2rem;
-    }
-
-    /* Optional: smoother section transitions */
-    html {
-      scroll-behavior: smooth;
-    }
-    /* Twinkling Stars Background */
-    .stars {
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      z-index: -1;
-      overflow: hidden;
-      pointer-events: none;
-    }
-
-    .star {
-      position: absolute;
-      width: 2px;
-      height: 2px;
-      background: white;
-      border-radius: 50%;
-      opacity: 0.3;
-      animation: twinkle 2s infinite alternate;
-    }
-
-    @keyframes twinkle {
-      0% {
-        opacity: 0.1;
-        transform: scale(0.9);
-      }
-      100% {
-        opacity: 1;
-        transform: scale(1.1);
-      }
-    }
-
-    @media (max-width: 700px) {
-      .glassbar,
-      .url-checker-box {
-        width: 95vw;
-        padding: 15px;
-      }
-      .url-checker-box {
-        padding: 18px 8px 12px 8px;
-      }
-    }
-
-    /* === ADDED FIX FOR CONSISTENT BOX WIDTH === */
-    .glassbar,
-    .url-checker-box {
-      width: 720px;
-      
-      max-width: 95vw;
-      padding: 24px;
-      box-sizing: border-box;
-    }
-    .url-checker-box input[type="text"] {
-  padding: 10px 15px; /* Add horizontal spacing */
-  box-sizing: border-box; /* Ensures padding stays inside 100% width */
-}
-input[type="range"] {
-  padding: 0 12px;         /* adds horizontal padding */
-  box-sizing: border-box; /* ensures padding stays within width */
-}
-
-
-  </style>
-  
-  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
-
-</head>
-<body>
-  <div class="stars" id="stars"></div>
-
-  <!-- Top Navigation Bar -->
- <div class="navbar">
-  <div class="left">
-    <span class="material-icons" style="font-size: 24px; color: white; vertical-align: middle; margin-right: 8px;">
-      auto_awesome
-    </span>
-    Black Swan AV
-  </div>
-  <div class="right">
-    <a href="index.html">Home</a>
-    <a href="#url">URL Safety Checker</a>
-    <a href="#password">Password Generator</a>
-    <a href="#qrgen">QR Generator</a>
-  </div>
-</div>
-
-
-
-  <!-- URL Checker -->
-  <section class="panel">
-    <div class="glassbar url-checker-box" id="url">  
-      <h2>🔗 URL Safety Checker</h2>
-      <input type="text" id="urlInput" placeholder="Enter a URL to check" />
-      <button onclick="checkURL()">Check URL</button>
-      <div id="result" class="result" style="display:none;"></div>
-    </div>
-  </section>
-
-  <!-- Password Generator -->
-  <section class="panel password-section">
-    <div class="glassbar url-checker-box" id="password">
-      <h2>🔐 Password Generator</h2>
-
-      <div class="checkbox-group">
-        <input type="checkbox" id="includeUpper" checked />
-        <label for="includeUpper">Include Uppercase Letters</label>
-      </div>
-      <div class="checkbox-group">
-        <input type="checkbox" id="includeLower" checked />
-        <label for="includeLower">Include Lowercase Letters</label>
-      </div>
-      <div class="checkbox-group">
-        <input type="checkbox" id="includeNumbers" checked />
-        <label for="includeNumbers">Include Numbers</label>
-      </div>
-      <div class="checkbox-group">
-        <input type="checkbox" id="includeSymbols" />
-        <label for="includeSymbols">Include Symbols</label>
-      </div>
-
-      <label for="length">Length: <span id="lengthVal">12</span></label>
-      <input
-        type="range"
-        id="length"
-        min="4"
-        max="32"
-        value="12"
-        oninput="document.getElementById('lengthVal').innerText = this.value"
-      />
-
-      <button onclick="generatePassword()">Generate Password</button>
-      <input type="text" id="passwordOutput" readonly />
-    </div>
-
-    <script>
-      const starContainer = document.getElementById('stars');
-      const numStars = 150; // You can increase this for denser star field
-
-      for (let i = 0; i < numStars; i++) {
-        const star = document.createElement('div');
-        star.className = 'star';
-        star.style.top = `${Math.random() * 100}%`;
-        star.style.left = `${Math.random() * 100}%`;
-        star.style.animationDuration = `${1 + Math.random() * 2}s`;
-        starContainer.appendChild(star);
-      }
-    </script>
-  </section>
-
-  <script>
-    function checkURL() {
-      const input = document.getElementById('urlInput').value.trim();
-      const resultDiv = document.getElementById('result');
-      resultDiv.style.display = 'block';
-      let issues = [];
-      let score = 0;
-      let url;
-
-      try {
-        url = new URL(input.startsWith('http') ? input : 'http://' + input);
-      } catch (e) {
-        resultDiv.innerHTML = '<strong>❌ Invalid URL</strong>';
-        resultDiv.className = 'result unsafe';
-        return;
-      }
-
-      const hostname = url.hostname.toLowerCase();
-      const tld = hostname.split('.').pop();
-      const protocol = url.protocol;
-      const sketchyTLDs = ['tk', 'ml', 'ga', 'cf', 'gq', 'xyz', 'top', 'info'];
-      const phishingKeywords = ['login', 'secure', 'update', 'signin', 'verify'];
-      const brandNames = ['paypal', 'facebook', 'google', 'microsoft', 'apple', 'amazon'];
-
-      if (sketchyTLDs.includes(tld)) {
-        issues.push('Suspicious TLD: .' + tld);
-        score += 2;
-      }
-
-      if (hostname.split('.').length > 3) {
-        issues.push('Too many subdomains (may be spoofing)');
-        score += 1;
-      }
-
-      for (let brand of brandNames) {
-        for (let keyword of phishingKeywords) {
-          if (hostname.includes(brand) && hostname.includes(keyword)) {
-            issues.push(`Uses both brand "${brand}" and keyword "${keyword}"`);
-            score += 3;
-          }
+    <meta charset="UTF-8" />
+    <title>URL & Password Tool</title>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <style>
+        /* ...existing CSS code... */
+        
+         :root {
+            --primary: #000000;
+            --secondary: #111111;
+            --accent: #1a1a1a;
+            --highlight: #e94560;
+            --white: #ffffff;
         }
-      }
+        /* Vertical Navbar Styles */
+        
+        .vertical-navbar {
+            position: fixed;
+            left: 0;
+            top: 0;
+            height: 100vh;
+            width: 200px;
+            background: rgba(0, 0, 0, 0.9);
+            backdrop-filter: blur(10px);
+            border-right: 1px solid rgba(255, 255, 255, 0.1);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding-top: 50px;
+            z-index: 999;
+        }
+        
+        .vertical-navbar a {
+            color: var(--white);
+            text-decoration: none;
+            font-size: 1rem;
+            font-weight: 500;
+            margin: 15px 0;
+            padding: 10px 20px;
+            border-radius: 10px;
+            transition: background 0.3s, color 0.3s;
+            width: 80%;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .vertical-navbar a::before {
+            content: "";
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 300%;
+            height: 300%;
+            background: radial-gradient(circle, rgba(255, 255, 255, 0.3) 10%, transparent 10.01%);
+            background-size: 50% 50%;
+            transform: translate(-50%, -50%) scale(0);
+            transition: transform 0.5s ease;
+            border-radius: 50%;
+            pointer-events: none;
+            z-index: 0;
+        }
+        
+        .vertical-navbar a:hover::before {
+            transform: translate(-50%, -50%) scale(1);
+        }
+        
+        .vertical-navbar a:hover {
+            background: var(--highlight);
+            color: var(--primary);
+        }
+        /* Adjust body and panels for navbar */
+        
+        .popup {
+            background-color: var(--highlight);
+        }
+        
+        body {
+            margin: 0 0 0 200px;
+            font-family: 'Montserrat', sans-serif;
+            background: radial-gradient(ellipse at bottom, #0d0d0d 0%, #000 100%);
+            color: #fff;
+            overflow-x: hidden;
+        }
+        
+        h2 {
+            color: var(--highlight);
+            animation: autoBlur 5s ease-in-out infinite;
+            filter: blur(0);
+            transition: filter 2.5s ease-in-out;
+        }
+        
+        .star {
+            position: absolute;
+            width: 2px;
+            height: 2px;
+            background: white;
+            border-radius: 50%;
+            opacity: 0.3;
+            animation: twinkle 2s infinite alternate;
+        }
+        
+        @keyframes twinkle {
+            0% {
+                opacity: 0.1;
+                transform: scale(0.9);
+            }
+            100% {
+                opacity: 1;
+                transform: scale(1.1);
+            }
+        }
+        
+        .glass-navbar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 20px;
+            height: 60px;
+            backdrop-filter: blur(10px);
+            background: rgba(255, 255, 255, 0.05);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 40px;
+            z-index: 1001;
+            color: var(--white);
+        }
+        
+        .navbar-left {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .navbar-name {
+            font-size: 1.2rem;
+            font-weight: bold;
+        }
+        
+        .navbar-links {
+            display: flex;
+            gap: 20px;
+        }
+        
+        .navbar-links a {
+            color: var(--white);
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.2s;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .navbar-links a::before {
+            content: "";
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 300%;
+            height: 300%;
+            background: radial-gradient(circle, rgba(255, 255, 255, 0.3) 10%, transparent 10.01%);
+            background-size: 50% 50%;
+            transform: translate(-50%, -50%) scale(0);
+            transition: transform 0.5s ease;
+            border-radius: 50%;
+            pointer-events: none;
+            z-index: 0;
+        }
+        
+        .navbar-links a:hover::before {
+            transform: translate(-50%, -50%) scale(1);
+        }
+        
+        .navbar-logo {
+            height: 34px;
+            width: auto;
+            object-fit: contain;
+            margin-right: 8px;
+        }
+        
+        .navbar-links a:hover {
+            color: var(--highlight);
+        }
+        
+        .glassbar button {
+            background: var(--highlight);
+            color: var(--white);
+            border: none;
+            border-radius: 30px;
+            padding: 12px 0;
+            font-size: 1.1rem;
+            font-weight: 600;
+            width: 100%;
+            cursor: pointer;
+            margin-bottom: 12px;
+            transition: background 0.3s, box-shadow 0.3s;
+        }
+        
+        .glassbar button:hover {
+            background: #ff5a7a;
+            box-shadow: 0 0 12px rgba(233, 69, 96, 0.5);
+        }
+        
+        input[type="text"],
+        input[type="range"],
+        button,
+        label {
+            padding: 10px;
+            font-size: 16px;
+            width: 100%;
+            margin-bottom: 15px;
+            border-radius: 10px;
+            border: none;
+        }
+        
+        input[type="text"] {
+            background: #1c1c1c;
+            color: #ffb6c1;
+        }
+        
+        button {
+            background: #ff2e88;
+            color: #fff;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        button:hover {
+            background: #ff69b4;
+            box-shadow: 0 0 10px rgba(255, 105, 180, 0.5);
+        }
+        
+        .url-checker-box button {
+            background: var(--highlight);
+            color: var(--white);
+            border: none;
+            border-radius: 30px;
+            padding: 12px 0;
+            font-size: 1.1rem;
+            font-weight: 600;
+            width: 100%;
+            cursor: pointer;
+            margin-bottom: 12px;
+            transition: background 0.3s, box-shadow 0.3s;
+        }
+        
+        .url-checker-box button:hover {
+            background: #ff5a7a;
+            box-shadow: 0 0 12px rgba(233, 69, 96, 0.5);
+        }
+        
+        .glassbar,
+        .url-checker-box {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(1px);
+            -webkit-backdrop-filter: blur(1px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            box-shadow: 0 0 20px rgba(233, 69, 96, 0.2);
+            border-radius: 20px;
+            padding: 24px;
+            width: 600px;
+            max-width: 95vw;
+            box-sizing: border-box;
+        }
+        
+        .panel {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            padding: 2rem;
+            width: 100%;
+            max-width: 100vw;
+            box-sizing: border-box;
+        }
+        
+        .result {
+            padding: 15px;
+            border-radius: 10px;
+            margin-top: 10px;
+        }
+        
+        .safe {
+            background-color: #1e3b30;
+            color: #a2e3d4;
+        }
+        
+        .potential {
+            background-color: #4e3d05;
+            color: #ffe6a1;
+        }
+        
+        .unsafe {
+            background-color: #5a1c28;
+            color: #f2a9b6;
+        }
+        
+        .section {
+            margin-bottom: 6rem;
+            animation: fadeIn 1.2s ease-in;
+            scroll-snap-align: start;
+        }
+        
+        .checkbox-group:hover {
+            gap: 14px;
+            transform: translateX(5px);
+        }
+        
+        .checkbox-group {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 12px;
+            transition: gap 0.3s ease;
+        }
+        
+        .checkbox-group input[type="checkbox"] {
+            transform: scale(1.2);
+            accent-color: #ff2e88;
+            cursor: pointer;
+        }
+        
+        .checkbox-group label {
+            margin: 0;
+            width: auto;
+            display: flex;
+            align-items: center;
+            font-size: 15px;
+        }
+        
+        .section {
+            margin-bottom: 6rem;
+            animation: fadeIn 1.2s ease-in;
+        }
+        
+        @keyframes fadeIn {
+            0% {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            100% {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        html,
+        body {
+            height: 100%;
+            scroll-snap-type: y mandatory;
+            overflow-y: scroll;
+        }
+        
+        .panel {
+            height: 100vh;
+            scroll-snap-align: start;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 2rem;
+        }
+        
+        html {
+            scroll-behavior: smooth;
+        }
+        
+        .stars {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            overflow: hidden;
+            pointer-events: none;
+        }
+        
+        .star {
+            position: absolute;
+            width: 2px;
+            height: 2px;
+            background: white;
+            border-radius: 50%;
+            opacity: 0.3;
+            animation: twinkle 2s infinite alternate;
+        }
+        
+        @keyframes twinkle {
+            0% {
+                opacity: 0.1;
+                transform: scale(0.9);
+            }
+            100% {
+                opacity: 1;
+                transform: scale(1.1);
+            }
+        }
+        
+        @media (max-width: 700px) {
+            .glassbar,
+            .url-checker-box {
+                width: 95vw;
+                padding: 15px;
+            }
+            .url-checker-box {
+                padding: 18px 8px 12px 8px;
+            }
+        }
+        
+        .glassbar,
+        .url-checker-box {
+            width: 720px;
+            max-width: 95vw;
+            padding: 24px;
+            box-sizing: border-box;
+        }
+        
+        .url-checker-box input[type="text"] {
+            padding: 10px 15px;
+            box-sizing: border-box;
+        }
+        
+        input[type="range"] {
+            -webkit-appearance: none;
+            width: 100%;
+            height: 16px;
+            border-radius: 20px;
+            background: linear-gradient(90deg, #00d4ff, #090979, #00d4ff);
+            background-size: 200% 200%;
+            outline: none;
+            margin: 10px 0;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border: 2px solid rgba(0, 212, 255, 0.3);
+            box-shadow: inset 0 0 10px rgba(0, 212, 255, 0.2);
+            animation: liquidFlow 3s ease infinite;
+        }
+        
+        @keyframes liquidFlow {
+            0% {
+                background-position: 0% 50%;
+            }
+            50% {
+                background-position: 100% 50%;
+            }
+            100% {
+                background-position: 0% 50%;
+            }
+        }
+        
+        input[type="range"]::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            background: linear-gradient(45deg, #00d4ff, #090979);
+            border: 3px solid #fff;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 0 20px rgba(0, 212, 255, 0.8), 0 0 40px rgba(9, 9, 121, 0.6);
+        }
+        
+        input[type="range"]::-webkit-slider-thumb:hover {
+            transform: scale(1.3);
+            box-shadow: 0 0 30px rgba(0, 212, 255, 1), 0 0 60px rgba(9, 9, 121, 0.8);
+        }
+        
+        input[type="range"]::-moz-range-thumb {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            background: linear-gradient(45deg, #00d4ff, #090979);
+            border: 3px solid #fff;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 0 20px rgba(0, 212, 255, 0.8), 0 0 40px rgba(9, 9, 121, 0.6);
+        }
+        
+        input[type="range"]::-moz-range-thumb:hover {
+            transform: scale(1.3);
+            box-shadow: 0 0 30px rgba(0, 212, 255, 1), 0 0 60px rgba(9, 9, 121, 0.8);
+        }
+        
+        button {
+            position: relative;
+            overflow: hidden;
+            transition: color 0.3s ease;
+        }
+        
+        button::before {
+            content: "";
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 300%;
+            height: 300%;
+            background: radial-gradient(circle, rgba(255, 255, 255, 0.3) 10%, transparent 10.01%);
+            background-size: 50% 50%;
+            transform: translate(-50%, -50%) scale(0);
+            transition: transform 0.5s ease;
+            border-radius: 50%;
+            pointer-events: none;
+            z-index: 0;
+        }
+        
+        button:hover::before {
+            transform: translate(-50%, -50%) scale(1);
+        }
+        
+        .panel {
+            animation: slideIn 0.8s ease forwards;
+            opacity: 0;
+            transform: translateY(20px);
+        }
+        
+        @keyframes slideIn {
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        @keyframes autoBlur {
+            0%,
+            100% {
+                filter: blur(0);
+            }
+            50% {
+                filter: blur(2px);
+            }
+        }
+    </style>
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+</head>
 
-      if (hostname.length > 45 || (hostname.match(/-/g) || []).length > 3) {
-        issues.push('Unusually long or hyphenated domain');
-        score += 1;
-      }
+<body>
+    <!-- Vertical Navbar -->
+    <nav class="vertical-navbar">
+        <a href="index.html"><i class="fas fa-home"></i> Home</a>
+        <a href="#url"><i class="fas fa-shield-alt"></i> <abbr title="This tool helps check if a Uniform Resource Locator is safe from phishing and malware."> URL Safety Checker</abbr></a>
+        <a href="#password"><i class="fas fa-key"></i> <abbr title="Generate strong passwords for better security.">Password Generator</abbr></a>
+        <a href="#qrgen"><i class="fas fa-qrcode"></i> <abbr title="Generate QR codes for easy sharing of information.">QR Generator</abbr></a>
+    </nav>
 
-      if (protocol !== 'https:') {
-        issues.push('Insecure connection (not HTTPS)');
-        score += 1;
-      }
+    <div class="stars" id="stars"></div>
 
-      if (/^\d{1,3}(\.\d{1,3}){3}$/.test(hostname)) {
-        issues.push('URL uses an IP address');
-        score += 3;
-      }
+    <!-- <div id="cartoonVirus" style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); font-size: 100px; opacity: 0; z-index: -2; transition: opacity 0.5s ease;">🦠</div>
+    <div id="cartoonVirus2" style="position: absolute; top: 20%; left: 20%; font-size: 70px; opacity: 0; z-index: -2; transition: opacity 0.5s ease;">🦠</div>
+    <div id="cartoonVirus3" style="position: absolute; top: 70%; left: 80%; font-size: 120px; opacity: 0; z-index: -2; transition: opacity 0.5s ease;">🦠</div>
+    <div id="cartoonVirus4" style="position: absolute; top: 80%; left: 30%; font-size: 50px; opacity: 0; z-index: -2; transition: opacity 0.5s ease;">🦠</div>
+    <div id="cartoonVirus5" style="position: absolute; top: 30%; left: 70%; font-size: 90px; opacity: 0; z-index: -2; transition: opacity 0.5s ease;">🦠</div> -->
 
-      if (url.href.includes('@')) {
-        issues.push("Contains '@' symbol (possible obfuscation)");
-        score += 2;
-      }
+    <!-- Top Navigation Bar -->
+    <header class="glass-navbar">
+        <div class="navbar-left">
+            <img src="logo.png" alt="Logo" class="navbar-logo">
+            <span class="navbar-name">Black Swan</span>
+        </div>
+        <nav class="navbar-links">
+            <a href="index.html">Tech Stack</a>
+            <a href="webutil.html">Web Utilities</a>
+            <a href="tests.html">Tests</a>
+            <a href="https://github.com/Lonestar02/Black-Swan" target="_blank"><i class="fab fa-github"></i></a>
+            <a href="https://twitter.com/hocus_crobat" target="_blank"><i class="fab fa-twitter"></i></a>
+        </nav>
+    </header>
 
-      let rating = '';
-      let cssClass = '';
-      if (score >= 5) {
-        rating = '❌ Unsafe';
-        cssClass = 'unsafe';
-      } else if (score >= 2) {
-        rating = '⚠️ Potentially Dangerous';
-        cssClass = 'potential';
-      } else {
-        rating = '✅ Safe';
-        cssClass = 'safe';
-      }
+    <!-- URL Checker -->
+    <section class="panel">
+        <div class="glassbar url-checker-box" id="url">
+            <h2>🔗 URL Safety Checker</h2>
+            <input type="text" id="urlInput" placeholder="Enter a URL to check" />
+            <button onclick="checkURL()">Check URL</button>
+            <div id="result" class="result" style="display:none;"></div>
+        </div>
+    </section>
 
-      resultDiv.className = 'result ' + cssClass;
-      resultDiv.innerHTML = `<strong>${rating}</strong><br><br>`;
-      if (issues.length > 0) {
-        resultDiv.innerHTML += `<div class="issue-list"><strong>Issues detected:</strong><ul>`;
-        issues.forEach((issue) => (resultDiv.innerHTML += `<li>${issue}</li>`));
-        resultDiv.innerHTML += `</ul></div>`;
-      } else {
-        resultDiv.innerHTML += `No major issues found.`;
-      }
-    }
+    <!-- Password Generator -->
+    <section class="panel password-section">
+        <div class="glassbar url-checker-box" id="password">
+            <h2>🔐 Password Generator</h2>
+            <div class="checkbox-group">
+                <input type="checkbox" id="includeUpper" checked />
+                <label for="includeUpper">Include Uppercase Letters</label>
+            </div>
+            <div class="checkbox-group">
+                <input type="checkbox" id="includeLower" checked />
+                <label for="includeLower">Include Lowercase Letters</label>
+            </div>
+            <div class="checkbox-group">
+                <input type="checkbox" id="includeNumbers" checked />
+                <label for="includeNumbers">Include Numbers</label>
+            </div>
+            <div class="checkbox-group">
+                <input type="checkbox" id="includeSymbols" />
+                <label for="includeSymbols">Include Symbols</label>
+            </div>
+            <label for="length">Length: <span id="lengthVal">12</span></label>
+            <input type="range" id="length" min="4" max="32" value="12" oninput="document.getElementById('lengthVal').innerText = this.value" />
+            <button onclick="generatePassword()">Generate Password</button>
+            <input type="text" id="passwordOutput" readonly />
+        </div>
+    </section>
 
-    function generatePassword() {
-      const upper = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
-      const lower = 'abcdefghijklmnopqrstuvwxyz';
-      const numbers = '0123456789';
-      const symbols = "!@#$%^&*()-_=+[]{}|;:',.<>?/";
+    <!-- QR Code Generator -->
+    <section class="panel">
+        <div class="glassbar url-checker-box" id="qrgen">
+            <h2>📷 QR Code Generator</h2>
+            <input type="text" id="qrText" placeholder="Enter text or URL for QR code" />
+            <button onclick="generateQR()">Generate QR Code</button>
+            <div id="qrResult" style="margin-top: 20px; text-align: center;"></div>
+        </div>
+    </section>
 
-      let pool = '';
-      if (document.getElementById('includeUpper').checked) pool += upper;
-      if (document.getElementById('includeLower').checked) pool += lower;
-      if (document.getElementById('includeNumbers').checked) pool += numbers;
-      if (document.getElementById('includeSymbols').checked) pool += symbols;
+    <!-- Scripts -->
+    <script>
+        // Twinkling stars background
+        const starContainer = document.getElementById('stars');
+        const numStars = 150;
+        for (let i = 0; i < numStars; i++) {
+            const star = document.createElement('div');
+            star.className = 'star';
+            star.style.top = `${Math.random() * 100}%`;
+            star.style.left = `${Math.random() * 100}%`;
+            star.style.animationDuration = `${1 + Math.random() * 2}s`;
+            starContainer.appendChild(star);
+        }
 
-      const length = parseInt(document.getElementById('length').value);
-      if (pool === '') {
-        alert('Please select at least one character set.');
-        return;
-      }
+        // Cartoon virus animation
+        // const viruses = [
+        //     document.getElementById('cartoonVirus'),
+        //     document.getElementById('cartoonVirus2'),
+        //     document.getElementById('cartoonVirus3'),
+        //     document.getElementById('cartoonVirus4'),
+        //     document.getElementById('cartoonVirus5')
+        // ];
+        // setInterval(() => {
+        //     viruses.forEach(virus => {
+        //         virus.style.opacity = '1';
+        //     });
+        //     setTimeout(() => {
+        //         viruses.forEach(virus => {
+        //             virus.style.opacity = '0';
+        //         });
+        //     }, 2000);
+        // }, 7000);
 
-      let password = '';
-      for (let i = 0; i < length; i++) {
-        password += pool[Math.floor(Math.random() * pool.length)];
-      }
-      document.getElementById('passwordOutput').value = password;
-    }
-  </script>
-  <!-- QR Code Generator -->
-<section class="panel">
-  <div class="glassbar url-checker-box" id="qrgen">
-    <h2>📷 QR Code Generator</h2>
-    <input type="text" id="qrText" placeholder="Enter text or URL for QR code" />
-    <button onclick="generateQR()">Generate QR Code</button>
-    <div id="qrResult" style="margin-top: 20px; text-align: center;"></div>
-  </div>
-</section>
-<script>
-  function generateQR() {
-    const text = document.getElementById('qrText').value.trim();
-    const qrDiv = document.getElementById('qrResult');
+        // URL Safety Checker
+        function checkURL() {
+            const input = document.getElementById('urlInput').value.trim();
+            const resultDiv = document.getElementById('result');
+            resultDiv.style.display = 'block';
+            let issues = [];
+            let score = 0;
+            let url;
 
-    if (!text) {
-      qrDiv.innerHTML = '<span style="color: #f88;">⚠️ Please enter some text.</span>';
-      return;
-    }
+            try {
+                url = new URL(input.startsWith('http') ? input : 'http://' + input);
+            } catch (e) {
+                resultDiv.innerHTML = '<strong>❌ Invalid URL</strong>';
+                resultDiv.className = 'result unsafe';
+                return;
+            }
 
-    // Clear previous result
-    qrDiv.innerHTML = '';
+            const hostname = url.hostname.toLowerCase();
+            const tld = hostname.split('.').pop();
+            const protocol = url.protocol;
+            const sketchyTLDs = ['tk', 'ml', 'ga', 'cf', 'gq', 'xyz', 'top', 'info'];
+            const phishingKeywords = ['login', 'secure', 'update', 'signin', 'verify'];
+            const brandNames = ['paypal', 'facebook', 'google', 'microsoft', 'apple', 'amazon'];
 
-    const qrCode = document.createElement('img');
-    qrCode.src = `https://api.qrserver.com/v1/create-qr-code/?data=${encodeURIComponent(text)}&size=200x200`;
-    qrCode.alt = "QR Code";
+            if (sketchyTLDs.includes(tld)) {
+                issues.push('Suspicious TLD: .' + tld);
+                score += 2;
+            }
 
-    qrDiv.appendChild(qrCode);
-  }
-</script>
+            if (hostname.split('.').length > 3) {
+                issues.push('Too many subdomains (may be spoofing)');
+                score += 1;
+            }
+
+            for (let brand of brandNames) {
+                for (let keyword of phishingKeywords) {
+                    if (hostname.includes(brand) && hostname.includes(keyword)) {
+                        issues.push(`Uses both brand "${brand}" and keyword "${keyword}"`);
+                        score += 3;
+                    }
+                }
+            }
+
+            if (hostname.length > 45 || (hostname.match(/-/g) || []).length > 3) {
+                issues.push('Unusually long or hyphenated domain');
+                score += 1;
+            }
+
+            if (protocol !== 'https:') {
+                issues.push('Insecure connection (not HTTPS)');
+                score += 1;
+            }
+
+            if (/^\d{1,3}(\.\d{1,3}){3}$/.test(hostname)) {
+                issues.push('URL uses an IP address');
+                score += 3;
+            }
+
+            if (url.href.includes('@')) {
+                issues.push("Contains '@' symbol (possible obfuscation)");
+                score += 2;
+            }
+
+            let rating = '';
+            let cssClass = '';
+            if (score >= 5) {
+                rating = '❌ Unsafe';
+                cssClass = 'unsafe';
+            } else if (score >= 2) {
+                rating = '⚠ Potentially Dangerous';
+                cssClass = 'potential';
+            } else {
+                rating = '✅ Safe';
+                cssClass = 'safe';
+            }
+
+            resultDiv.className = 'result ' + cssClass;
+            resultDiv.innerHTML = `<strong>${rating}</strong><br><br>`;
+            if (issues.length > 0) {
+                resultDiv.innerHTML += `<div class="issue-list"><strong>Issues detected:</strong><ul>`;
+                issues.forEach((issue) => (resultDiv.innerHTML += `<li>${issue}</li>`));
+                resultDiv.innerHTML += `</ul></div>`;
+            } else {
+                resultDiv.innerHTML += `No major issues found.`;
+            }
+        }
+
+        // Password Generator
+        function generatePassword() {
+            const upper = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+            const lower = 'abcdefghijklmnopqrstuvwxyz';
+            const numbers = '0123456789';
+            const symbols = "!@#$%^&*()-_=+[]{}|;:',.<>?/";
+            let pool = '';
+            if (document.getElementById('includeUpper').checked) pool += upper;
+            if (document.getElementById('includeLower').checked) pool += lower;
+            if (document.getElementById('includeNumbers').checked) pool += numbers;
+            if (document.getElementById('includeSymbols').checked) pool += symbols;
+            const length = parseInt(document.getElementById('length').value);
+            if (pool === '') {
+                alert('Please select at least one character set.');
+                return;
+            }
+            let password = '';
+            for (let i = 0; i < length; i++) {
+                password += pool[Math.floor(Math.random() * pool.length)];
+            }
+            document.getElementById('passwordOutput').value = password;
+        }
+
+        // QR Code Generator
+        function generateQR() {
+            const text = document.getElementById('qrText').value.trim();
+            const qrDiv = document.getElementById('qrResult');
+            if (!text) {
+                qrDiv.innerHTML = '<span style="color: #f88;">⚠ Please enter some text.</span>';
+                return;
+            }
+            qrDiv.innerHTML = '';
+            const qrCode = document.createElement('img');
+            qrCode.src = `https://api.qrserver.com/v1/create-qr-code/?data=${encodeURIComponent(text)}&size=200x200`;
+            qrCode.alt = 'QR Code';
+            qrDiv.appendChild(qrCode);
+        }
+    </script>
 </body>
+
 </html>

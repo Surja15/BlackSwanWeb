@@ -1,621 +1,745 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Black Swan Antivirus</title>
-  <link href="https://fonts.googleapis.com/css?family=Montserrat:700,400&display=swap" rel="stylesheet">
-  <style>
-    :root {
-  --primary: #000000;
-  --secondary: #111111;
-  --accent: #1a1a1a;
-  --highlight: #e94560; /* keep red for contrast */
-  --white: #ffffff;
-}
-    * { box-sizing: border-box; margin: 0; padding: 0; }
-    body {
-      font-family: 'Montserrat', sans-serif;
-      background: linear-gradient(135deg, var(--primary), var(--secondary));
-      color: var(--white);
-      min-height: 100vh;
-      overflow-x: hidden;
-    }
-   header  {
-      background: transparent; 
-      padding: 40px 0 60px 0;
-      text-align: center;
-      position: relative;
-      overflow: hidden;
-    }
-    header h1 {
-      font-size: 3.5rem;
-      letter-spacing: 2px;
-      color: var(--highlight);
-      animation: fadeInDown 1s;
-    }
-    header p {
-      font-size: 1.5rem;
-      margin-top: 20px;
-      color: #eee;
-      animation: fadeInUp 1.2s;
-    }
-   .background-animation {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  z-index: -1;
-  filter: blur(0.2px);
-  pointer-events: none;
-}
-
-
-    .section {
-      max-width: 1200px;
-      margin: 60px auto;
-      padding: 40px 30px;
-      background-color: var(--primary);
-      border-radius: 24px;
-      box-shadow: 0 8px 32px rgba(0,0,0,0.25);
-      opacity: 0;
-      transform: translateY(40px);
-      transition: all 0.7s cubic-bezier(.77,0,.18,1);
-    }
-    .section.visible {
-      opacity: 1;
-      transform: translateY(0);
-    }
-    .section h2 {
-      color: var(--highlight);
-      text-align: center;
-      font-size: 2.2rem;
-      margin-bottom: 18px;
-    }
-    .features {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 32px;
-      margin-top: 24px;
-    }
-    .feature-card {
-      flex: 1 1 260px;
-      background: var(--accent);
-      border-radius: 16px;
-      padding: 28px 20px;
-      box-shadow: 0 4px 16px rgba(0,0,0,0.15);
-      transition: transform 0.3s;
-      text-align: center;
-    }
-    .feature-card:hover {
-      transform: translateY(-8px) scale(1.03);
-      box-shadow: 0 8px 32px rgba(233,69,96,0.15);
-    }
-    .feature-card i {
-      font-size: 2.5rem;
-      color: var(--highlight);
-      margin-bottom: 12px;
-      display: block;
-    }
-    .feature-card h3 {
-      font-size: 1.3rem;
-      margin-bottom: 10px;
-    }
-    .feature-card p {
-      font-size: 1rem;
-      color: #ddd;
-    }
-    .cta-section {
-      text-align: center;
-      margin-top: 40px;
-    }
-    .cta-btn {
-      background: var(--highlight);
-      color: var(--white);
-      font-size: 1.3rem;
-      padding: 18px 48px;
-      border: none;
-      border-radius: 32px;
-      cursor: pointer;
-      margin-top: 24px;
-      box-shadow: 0 4px 16px rgba(233,69,96,0.15);
-      transition: background 0.3s;
-    }
-    .cta-btn:hover {
-      background: #ff5e7e;
-    }
-    .testimonials {
-      display: flex;
-      gap: 32px;
-      flex-wrap: wrap;
-      margin-top: 24px;
-    }
-    .testimonial {
-      flex: 1 1 320px;
-      background: var(--accent);
-      border-radius: 16px;
-      padding: 24px 18px;
-      color: #fff;
-      font-style: italic;
-      box-shadow: 0 2px 8px rgba(0,0,0,0.10);
-    }
-    .testimonial span {
-      display: block;
-      margin-top: 12px;
-      font-weight: bold;
-      color: var(--highlight);
-      font-style: normal;
-    }
-    footer {
-      text-align: center;
-      padding: 32px 0;
-      background: var(--secondary);
-      color: #aaa;
-      font-size: 1rem;
-      margin-top: 60px;
-    }
-    
-    @keyframes fadeInDown {
-      from { opacity: 0; transform: translateY(-40px);}
-      to { opacity: 1; transform: translateY(0);}
-    }
-    @keyframes fadeInUp {
-      from { opacity: 0; transform: translateY(40px);}
-      to { opacity: 1; transform: translateY(0);}
-    }
-    /* Responsive */
-    @media (max-width: 900px) {
-      .features, .testimonials { flex-direction: column; }
-      .section { padding: 24px 10px; }
-    }
-    @media (max-width: 600px) {
-      header h1 { font-size: 2.2rem; }
-      .section h2 { font-size: 1.4rem; }
-      .cta-btn { font-size: 1rem; padding: 12px 24px; }
-    }
-    .info-container {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 32px;
-  margin-top: 24px;
-  justify-content: space-between;
-}
-
-.info-box {
-  flex: 1 1 30%;
-  background: var(--accent);
-  border-radius: 16px;
-  padding: 24px;
-  color: var(--white);
-  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.15);
-}
-
-.info-box h3 {
-  margin-top: 0;
-  margin-bottom: 12px;
-  color: var(--highlight);
-  font-size: 1.4rem;
-}
-
-.info-box ul {
-  padding-left: 20px;
-  margin-top: 12px;
-  color: #ddd;
-}
-.hero {
-  height: 100vh;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  flex-direction: column;
-  background: transparent;
-  color: white;
-  text-align: center;
-  position: relative;
-  z-index: 2;
-}
-
-.hero-inner {
-  animation: fadeInUp 1s ease-out forwards;
-}
-
-.hero .intro {
-  font-size: 1.4rem;
-  color: #ccc;
-  margin-bottom: 10px;
-  letter-spacing: 2px;
-  animation: fadeInUp 1s ease-in-out;
-}
-
-.hero .main-title {
-  font-size: 4.5rem;
-  font-weight: 700;
-  letter-spacing: 1px;
-  color: var(--highlight);
-  margin-bottom: 20px;
-  animation: fadeInUp 1.2s ease-in-out;
-}
-
-.hero .changing-word::after {
-  content: "Antivirus";
-  animation: changeWord 8s infinite;
-  color: #00e6e6;
-  margin-left: 12px;
-}
-
-.hero .tagline {
-  font-size: 1.5rem;
-  color: #eee;
-  animation: fadeInUp 1.4s ease-in-out;
-  max-width: 80%;
-  margin-top: 5;
-  margin: 0 auto;
-}
-
-/* Word rotation */
-@keyframes changeWord {
-  0%    { content: "Antivirus"; }
-  25%   { content: "Engine"; }
-  50%   { content: "Privacy"; }
-  75%   { content: "Security"; }
-  100%  { content: "Antivirus"; }
-}
-
-#typed-text {
-  color: #00e6e6;
-}
-
-#cursor {
-  display: inline-block;
-  margin-left: 2px;
-  color: #00e6e6;
-  font-weight: bold;
-}
-.glass-navbar {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 60px;
-  backdrop-filter: blur(10px);
-  background: rgba(255, 255, 255, 0.05);
-  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 0 40px;
-  z-index: 1000;
-  color: var(--white);
-}
-
-.navbar-left {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-}
-
-.navbar-icon {
-  height: 30px;
-  width: 30px;
-}
-
-.navbar-name {
-  font-size: 1.2rem;
-  font-weight: bold;
-}
-
-.navbar-links {
-  display: flex;
-  gap: 20px;
-}
-
-.navbar-links a {
-  color: var(--white);
-  text-decoration: none;
-  font-weight: 500;
-  transition: color 0.2s;
-}
-.navbar-logo {
-  height: 34px;
-  width: auto;
-  object-fit: contain;
-  margin-right: 8px;
-}
-.navbar-links a:hover {
-  color: var(--highlight);
-}
-/* 1. Background Twinkling Stars */
-.stars {
-  position: fixed;
-  width: 100%;
-  height: 100%;
-  background: transparent;
-  box-shadow:
-    100px 50px white,
-    200px 80px white,
-    300px 120px white,
-    400px 200px white,
-    500px 300px white,
-    600px 150px white;
-  animation: twinkle 2s infinite alternate;
-  z-index: -1;
-}
-
-@keyframes twinkle {
-  0% { opacity: 0.3; }
-  100% { opacity: 1; }
-}
-
-
-
-
-
-  </style>
- <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
-  <script src="https://kit.fontawesome.com/7c2e8b7b7d.js" crossorigin="anonymous"></script>
-<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Black Swan Antivirus</title>
+    <link href="https://fonts.googleapis.com/css?family=Montserrat:700,400&display=swap" rel="stylesheet">
+    <style>
+         :root {
+            --primary: #000000;
+            --secondary: #111111;
+            --accent: #1a1a1a;
+            --highlight: #e94560;
+            /* keep red for contrast */
+            --white: #ffffff;
+        }
+        
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+        
+        body {
+            font-family: 'Montserrat', sans-serif;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: var(--white);
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+        
+        header {
+            background: transparent;
+            padding: 40px 0 60px 0;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        header h1 {
+            font-size: 3.5rem;
+            letter-spacing: 2px;
+            color: var(--highlight);
+            animation: fadeInDown 1s;
+        }
+        
+        header p {
+            font-size: 1.5rem;
+            margin-top: 20px;
+            color: #eee;
+            animation: fadeInUp 1.2s;
+        }
+        
+        .background-animation {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            filter: blur(0.2px);
+            pointer-events: none;
+        }
+        
+        .section {
+            max-width: 1200px;
+            margin: 60px auto;
+            padding: 40px 30px;
+            background-color: var(--primary);
+            border-radius: 24px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.25);
+            opacity: 0;
+            transform: translateY(40px);
+            transition: all 0.7s cubic-bezier(.77, 0, .18, 1);
+        }
+        
+        .section.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        
+        .section h2 {
+            color: var(--highlight);
+            text-align: center;
+            font-size: 2.2rem;
+            text-transform: uppercase;
+            background: linear-gradient(to right, #691902, #eb0808, #d702cc, #fd6094, #eb1b75, #f01a3e, #670202);
+            background-size: 200%;
+            background-clip: text;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            animation: animate-gradient 2.5s linear infinite, autoBlur 5s ease-in-out infinite;
+            margin-bottom: 18px;
+            filter: blur(0);
+            transition: filter 2.5s ease-in-out;
+        }
+        /* Auto blur effect animation */
+        
+        @keyframes autoBlur {
+            0%,
+            100% {
+                filter: blur(0);
+            }
+            50% {
+                filter: blur(2px);
+            }
+        }
+        
+        @keyframes animate-gradient {
+            to {
+                background-position: 200%;
+            }
+        }
+        
+        .features {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 32px;
+            margin-top: 24px;
+        }
+        
+        .feature-card {
+            flex: 1 1 260px;
+            background: var(--accent);
+            border-radius: 16px;
+            padding: 28px 20px;
+            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.15);
+            transition: transform 0.3s;
+            text-align: center;
+        }
+        
+        .feature-card:hover {
+            transform: translateY(-8px) scale(1.03);
+            box-shadow: 0 8px 32px rgba(233, 69, 96, 0.15);
+        }
+        
+        .feature-card i {
+            font-size: 2.5rem;
+            color: var(--highlight);
+            margin-bottom: 12px;
+            display: block;
+        }
+        
+        .feature-card h3 {
+            font-size: 1.3rem;
+            margin-bottom: 10px;
+        }
+        
+        .feature-card p {
+            font-size: 1rem;
+            color: #ddd;
+        }
+        
+        .cta-section {
+            text-align: center;
+            margin-top: 40px;
+        }
+        
+        .cta-btn {
+            background: var(--highlight);
+            color: var(--white);
+            font-size: 1.3rem;
+            padding: 18px 48px;
+            border: none;
+            border-radius: 32px;
+            cursor: pointer;
+            margin-top: 24px;
+            box-shadow: 0 4px 16px rgba(233, 69, 96, 0.15);
+            transition: background 0.3s;
+        }
+        
+        .cta-btn:hover {
+            background: #ff5e7e;
+        }
+        
+        .testimonials {
+            display: flex;
+            gap: 32px;
+            flex-wrap: wrap;
+            margin-top: 24px;
+        }
+        
+        .testimonial {
+            flex: 1 1 320px;
+            background: var(--accent);
+            border-radius: 16px;
+            padding: 24px 18px;
+            color: #fff;
+            font-style: italic;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.10);
+        }
+        
+        .testimonial span {
+            display: block;
+            margin-top: 12px;
+            font-weight: bold;
+            color: var(--highlight);
+            font-style: normal;
+        }
+        
+        footer {
+            text-align: center;
+            padding: 32px 0;
+            background: var(--secondary);
+            color: #aaa;
+            font-size: 1rem;
+            margin-top: 60px;
+        }
+        
+        @keyframes fadeInDown {
+            from {
+                opacity: 0;
+                transform: translateY(-40px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(40px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        /* Responsive */
+        
+        @media (max-width: 900px) {
+            .features,
+            .testimonials {
+                flex-direction: column;
+            }
+            .section {
+                padding: 24px 10px;
+            }
+        }
+        
+        @media (max-width: 600px) {
+            header h1 {
+                font-size: 2.2rem;
+            }
+            .section h2 {
+                font-size: 1.4rem;
+            }
+            .cta-btn {
+                font-size: 1rem;
+                padding: 12px 24px;
+            }
+        }
+        
+        .info-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 32px;
+            margin-top: 24px;
+            justify-content: space-between;
+        }
+        
+        .info-box {
+            flex: 1 1 30%;
+            background: var(--accent);
+            border-radius: 16px;
+            padding: 24px;
+            color: var(--white);
+            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.15);
+        }
+        
+        .info-box h3 {
+            margin-top: 0;
+            margin-bottom: 12px;
+            color: var(--highlight);
+            font-size: 1.4rem;
+        }
+        
+        .info-box ul {
+            padding-left: 20px;
+            margin-top: 12px;
+            color: #ddd;
+        }
+        
+        .hero {
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+            background: transparent;
+            color: white;
+            text-align: center;
+            position: relative;
+            z-index: 2;
+        }
+        
+        .hero-inner {
+            animation: fadeInUp 1s ease-out forwards;
+        }
+        
+        .hero .intro {
+            font-size: 1.4rem;
+            color: #ccc;
+            margin-bottom: 10px;
+            letter-spacing: 2px;
+            animation: fadeInUp 1s ease-in-out;
+        }
+        
+        .hero .main-title {
+            font-size: 4.5rem;
+            font-weight: 700;
+            letter-spacing: 1px;
+            color: var(--highlight);
+            margin-bottom: 20px;
+            animation: fadeInUp 1.2s ease-in-out;
+        }
+        
+        .hero .changing-word::after {
+            content: "Antivirus";
+            animation: changeWord 8s infinite;
+            color: #00e6e6;
+            margin-left: 12px;
+        }
+        
+        .hero .tagline {
+            font-size: 1.5rem;
+            color: #eee;
+            animation: fadeInUp 1.4s ease-in-out;
+            max-width: 80%;
+            margin-top: 5;
+            margin: 0 auto;
+        }
+        /* Word rotation */
+        
+        @keyframes changeWord {
+            0% {
+                content: "Antivirus";
+            }
+            25% {
+                content: "Engine";
+            }
+            50% {
+                content: "Privacy";
+            }
+            75% {
+                content: "Security";
+            }
+            100% {
+                content: "Antivirus";
+            }
+        }
+        
+        #typed-text {
+            color: #00e6e6;
+        }
+        
+        #cursor {
+            display: inline-block;
+            margin-left: 2px;
+            color: #00e6e6;
+            font-weight: bold;
+        }
+        
+        .glass-navbar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 60px;
+            backdrop-filter: blur(10px);
+            background: rgba(255, 255, 255, 0.05);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 40px;
+            z-index: 1000;
+            color: var(--white);
+        }
+        
+        .navbar-left {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .navbar-icon {
+            height: 30px;
+            width: 30px;
+        }
+        
+        .navbar-name {
+            font-size: 1.2rem;
+            font-weight: bold;
+        }
+        
+        .navbar-links {
+            display: flex;
+            gap: 20px;
+        }
+        
+        .navbar-links a {
+            color: var(--white);
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.2s;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .navbar-links a::before {
+            content: "";
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 300%;
+            height: 300%;
+            background: radial-gradient(circle, rgba(255, 255, 255, 0.3) 10%, transparent 10.01%);
+            background-size: 50% 50%;
+            transform: translate(-50%, -50%) scale(0);
+            transition: transform 0.5s ease;
+            border-radius: 50%;
+            pointer-events: none;
+            z-index: 0;
+        }
+        /* 1. Background Twinkling Stars */
+        
+        .navbar-links a:hover::before {
+            transform: translate(-50%, -50%) scale(1);
+        }
+        
+        .navbar-logo {
+            height: 34px;
+            width: auto;
+            object-fit: contain;
+            margin-right: 8px;
+        }
+        
+        .navbar-links a:hover {
+            color: var(--highlight);
+        }
+        
+        .stars {
+            position: fixed;
+            width: 100%;
+            height: 100%;
+            background: transparent;
+            box-shadow: 100px 50px white, 200px 80px white, 300px 120px white, 400px 200px white, 500px 300px white, 600px 150px white;
+            animation: twinkle 2s infinite alternate;
+            z-index: -1;
+        }
+        
+        @keyframes twinkle {
+            0% {
+                opacity: 0.3;
+            }
+            100% {
+                opacity: 1;
+            }
+        }
+        
+        @keyframes animate-gradient {
+            0% {
+                background-position: 0% 50%;
+            }
+            50% {
+                background-position: 100% 50%;
+            }
+            100% {
+                background-position: 0% 50%;
+            }
+        }
+    </style>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <script src="https://kit.fontawesome.com/7c2e8b7b7d.js" crossorigin="anonymous"></script>
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
 
 </head>
+
 <body>
 
 
 
-  <header class="glass-navbar">
-  <div class="navbar-left">
-    <img src="logo.png" alt="Logo" class="navbar-logo">
-    <span class="navbar-name">Black Swan</span>
-  </div>
-  <nav class="navbar-links">
-    <a href="#tech-stack">Tech Stack</a>
-    <a href="webutil.html">Web Utilities</a>
-    <a href="#download">Install</a>
-      <a href="https://github.com/Lonestar02/Black-Swan" target="_blank">
-      <i class="fab fa-github"></i>
-    </a>
-    <a href="https://twitter.com/hocus_crobat" target="_blank">
-      <i class="fab fa-twitter"></i>
-    </a>
-  </nav>
-</header>
+    <header class="glass-navbar">
+        <div class="navbar-left">
+            <img src="logo.png" alt="Logo" class="navbar-logo">
+            <span class="navbar-name">Black Swan</span>
+        </div>
+        <nav class="navbar-links">
+            <a href="#tech-stack">Tech Stack</a>
+            <a href="webutil.html">Web Utilities</a>
+            <a href="tests.html">Tests</a>
+            <a href="#download">Install</a>
+            <a href="https://github.com/Lonestar02/Black-Swan" target="_blank">
+                <i class="fab fa-github"></i>
+            </a>
+            <a href="https://twitter.com/hocus_crobat" target="_blank">
+                <i class="fab fa-twitter"></i>
+            </a>
+        </nav>
+    </header>
 
 
-  <header class="hero">
-  <canvas class="background-animation"></canvas>
-  <div class="hero-inner">
-    <h2 class="intro">Introducing //</h2>
-    <h1 class="main-title">Black Swan <span id="typed-text"></span><span id="cursor">|</span></h1>
-    <p class="tagline">A final-year cybersecurity project — light, dynamic, and built for precision.</p>
-  </div>
-  <div class="planet-horizon"></div>
+    <header class="hero">
+        <canvas class="background-animation"></canvas>
+        <div class="hero-inner">
+            <h2 class="intro">Introducing //</h2>
+            <h1 class="main-title">Black Swan <span id="typed-text"></span><span id="cursor">|</span></h1>
+            <p class="tagline">A final-year cybersecurity project — light, dynamic, and built for precision.</p>
+        </div>
+        <div class="planet-horizon"></div>
 
-</header>
-
-
-
-  <section class="section" id="features">
-    <h2>Key Features</h2>
-    <div class="features">
-      <div class="feature-card">
-        <i class="fas fa-shield-alt"></i>
-        <h3>Real-Time Scanning</h3>
-        <p>Continuously monitors file activity and system behavior to detect threats as they emerge.</p>
-      </div>
-      <div class="feature-card">
-        <i class="fas fa-brain"></i>
-        <h3>Custom Rule Support</h3>
-        <p>Advanced AV engine learns and adapts to new malware and ransomware via custom designed rules.</p>
-      </div>
-      <div class="feature-card">
-        <i class="fas fa-tachometer-alt"></i>
-        <h3>Ultra-Light Performance</h3>
-        <p>Runs silently in the background without slowing down your PC.</p>
-      </div>
-      <div class="feature-card">
-        <i class="fas fa-user-shield"></i>
-        <h3>File Classification and flagging</h3>
-        <p>Utilizes YARA’s capability to categorize files based on detected characteristics, aiding in threat analysis and incident response.</p>
-      </div>
-    </div>
-  </section>
-
-<section class="section" id="about">
-  <h2>About the Project</h2>
-  <div class="info-block">
-    <p><strong>Black Swan Antivirus</strong> is a final-year cybersecurity project built using the <strong>YARA</strong> engine. It provides real-time malware detection, rule-based scanning, and a lightweight GUI. The core scanning engine (<code>engine.c</code>) is written in C, optimized for speed and low system resource usage.</p>
-    <p>The GUI is powered by Python (Tkinter), and integrates seamlessly with YARA for executing dynamic detection rules. This ensures the tool remains both powerful and user-friendly.</p>
-  </div>
-</section>
-
-<section class="section" id="benchmark">
-  <h2>Benchmark Testing</h2>
-  <div class="features">
-    <div class="feature-card">
-      <i class="fas fa-virus"></i>
-      <h3>EICAR Virus Flagging</h3>
-      <p>All four EICAR test files were successfully flagged, confirming the engine's effectiveness in identifying known malware signatures.</p>
-    </div>
-    <div class="feature-card">
-      <i class="fas fa-search"></i>
-      <h3>File Detection Accuracy</h3>
-      <p>Detailed detection logs recorded file paths, types, and threat levels — enhancing traceability and threat insight.</p>
-    </div>
-    <div class="feature-card">
-      <i class="fas fa-bullseye"></i>
-      <h3>Rule-Based Precision</h3>
-      <p>Custom YARA rules executed with no false positives, validating the accuracy and reliability of the detection engine.</p>
-    </div>
-  </div>
-</section>
-
-<section class="section" id="tech-stack">
-  <h2>Technology Stack</h2>
-  <div class="features">
-    <div class="feature-card">
-      <i class="fas fa-cogs"></i>
-      <h3>C (engine.c)</h3>
-      <p>Handles core file scanning operations with minimal memory footprint and high execution speed.</p>
-    </div>
-    <div class="feature-card">
-      <i class="fab fa-python"></i>
-      <h3>Python (Tkinter)</h3>
-      <p>Implements the GUI layer and manages rule parsing, scan controls, and user interaction logic.</p>
-    </div>
-    <div class="feature-card">
-      <i class="fas fa-dna"></i>
-      <h3>YARA</h3>
-      <p>Used for writing and executing rules that classify and detect malware based on file content signatures.</p>
-    </div>
-    <div class="feature-card">
-      <i class="fab fa-github"></i>
-      <h3>GitHub</h3>
-      <p>Code hosted publicly for collaboration, version control, and open-source distribution of the project.</p>
-    </div>
-  </div>
-</section>
+    </header>
 
 
+    <section class="section" id="features">
+        <h2>Key Features</h2>
+        <div class="features">
+            <div class="feature-card">
+                <i class="fas fa-shield-alt"></i>
+                <h3>Real-Time Scanning</h3>
+                <p>Continuously monitors file activity and system behavior to detect threats as they emerge.</p>
+            </div>
+            <div class="feature-card">
+                <i class="fas fa-brain"></i>
+                <h3>Custom Rule Support</h3>
+                <p>Advanced AV engine learns and adapts to new malware and ransomware via custom designed rules.</p>
+            </div>
+            <div class="feature-card">
+                <i class="fas fa-tachometer-alt"></i>
+                <h3>Ultra-Light Performance</h3>
+                <p>Runs silently in the background without slowing down your PC.</p>
+            </div>
+            <div class="feature-card">
+                <i class="fas fa-user-shield"></i>
+                <h3>File Classification and flagging</h3>
+                <p>Utilizes YARA’s capability to categorize files based on detected characteristics, aiding in threat analysis and incident response.</p>
+            </div>
+        </div>
+    </section>
 
-  <section class="section cta-section" id="download">
-  <h2>Ready to Stay Protected?</h2>
-  <p>Install Black Swan Antivirus and experience the future of cybersecurity.</p>
-  <a href="https://github.com/Lonestar02/Black-Swan" target="_blank">
-    <button class="cta-btn">Download Now</button>
-  </a>
-</section>
+    <section class="section" id="about">
+        <h2>About the Project</h2>
+        <div class="info-block">
+            <p><strong>Black Swan Antivirus</strong> is a final-year cybersecurity project built using the <strong>YARA</strong> engine. It provides real-time malware detection, rule-based scanning, and a lightweight GUI. The core scanning engine (<code>engine.c</code>)
+                is written in C, optimized for speed and low system resource usage.</p>
+            <p>The GUI is powered by Python (Tkinter), and integrates seamlessly with YARA for executing dynamic detection rules. This ensures the tool remains both powerful and user-friendly.</p>
+        </div>
+    </section>
 
-  <footer>
-    &copy; 2025 Black Swan Antivirus. All rights reserved.
-  </footer>
+    <section class="section" id="benchmark">
+        <h2>Benchmark Testing</h2>
+        <div class="features">
+            <div class="feature-card">
+                <i class="fas fa-virus"></i>
+                <h3>EICAR Virus Flagging</h3>
+                <p>All four EICAR test files were successfully flagged, confirming the engine's effectiveness in identifying known malware signatures.</p>
+            </div>
+            <div class="feature-card">
+                <i class="fas fa-search"></i>
+                <h3>File Detection Accuracy</h3>
+                <p>Detailed detection logs recorded file paths, types, and threat levels — enhancing traceability and threat insight.</p>
+            </div>
+            <div class="feature-card">
+                <i class="fas fa-bullseye"></i>
+                <h3>Rule-Based Precision</h3>
+                <p>Custom YARA rules executed with no false positives, validating the accuracy and reliability of the detection engine.</p>
+            </div>
+        </div>
+    </section>
 
-  <script>
-  function revealSections() {
-    document.querySelectorAll('.section').forEach(section => {
-      const rect = section.getBoundingClientRect();
-      if (rect.top < window.innerHeight - 100) {
-        section.classList.add('visible');
-      }
-    });
-  }
+    <section class="section" id="tech-stack">
+        <h2>Technology Stack</h2>
+        <div class="features">
+            <div class="feature-card">
+                <i class="fas fa-cogs"></i>
+                <h3>C (engine.c)</h3>
+                <p>Handles core file scanning operations with minimal memory footprint and high execution speed.</p>
+            </div>
+            <div class="feature-card">
+                <i class="fab fa-python"></i>
+                <h3>Python (Tkinter)</h3>
+                <p>Implements the GUI layer and manages rule parsing, scan controls, and user interaction logic.</p>
+            </div>
+            <div class="feature-card">
+                <i class="fas fa-dna"></i>
+                <h3>YARA</h3>
+                <p>Used for writing and executing rules that classify and detect malware based on file content signatures.</p>
+            </div>
+            <div class="feature-card">
+                <i class="fab fa-github"></i>
+                <h3>GitHub</h3>
+                <p>Code hosted publicly for collaboration, version control, and open-source distribution of the project.</p>
+            </div>
+        </div>
+    </section>
 
-  window.addEventListener('scroll', revealSections);
-  window.addEventListener('DOMContentLoaded', revealSections);
 
-  const canvas = document.querySelector('.background-animation');
-  const ctx = canvas.getContext('2d');
-  let w, h, particles = [];
 
-  function resize() {
-    w = canvas.width = window.innerWidth;
-    h = canvas.height = window.innerHeight;
-  }
-  
+    <section class="section cta-section" id="download">
+        <h2>Ready to Stay Protected?</h2>
+        <p>Install Black Swan Antivirus and experience the future of cybersecurity.</p>
+        <a href="https://github.com/Lonestar02/Black-Swan" target="_blank">
+            <button class="cta-btn">Download Now</button>
+        </a>
+    </section>
 
-  class Particle {
-    constructor() {
-      this.reset();
-    }
+    <footer>
+        &copy; 2025 Black Swan Antivirus. All rights reserved.
+    </footer>
 
-    reset() {
-      this.x = Math.random() * w;
-      this.y = Math.random() * h;
-      this.r = Math.random() * 1.2 + 0.4;
-      this.dx = (Math.random() - 0.5) * 0.3;
-      this.dy = (Math.random() - 0.5) * 0.3;
-      this.baseAlpha = Math.random() * 0.5 + 0.3;
-      this.alpha = this.baseAlpha;
-      this.phase = Math.random() * Math.PI * 2;
-      this.speed = 0.02 + Math.random() * 0.02;
-    }
+    <script>
+        function revealSections() {
+            document.querySelectorAll('.section').forEach(section => {
+                const rect = section.getBoundingClientRect();
+                if (rect.top < window.innerHeight - 100) {
+                    section.classList.add('visible');
+                }
+            });
+        }
 
-    update() {
-      this.x += this.dx;
-      this.y += this.dy;
-      if (this.x < 0 || this.x > w) this.dx *= -1;
-      if (this.y < 0 || this.y > h) this.dy *= -1;
-      this.phase += this.speed;
-      this.alpha = this.baseAlpha + Math.sin(this.phase) * 0.3;
-    }
+        window.addEventListener('scroll', revealSections);
+        window.addEventListener('DOMContentLoaded', revealSections);
 
-    draw(ctx) {
-      ctx.beginPath();
-      ctx.arc(this.x, this.y, this.r, 0, 2 * Math.PI);
-      ctx.fillStyle = `rgba(255,255,255,${this.alpha})`;
-      ctx.shadowColor = "rgba(255,255,255,0.4)";
-      ctx.shadowBlur = 8;
-      ctx.fill();
-    }
-  }
+        const canvas = document.querySelector('.background-animation');
+        const ctx = canvas.getContext('2d');
+        let w, h, particles = [];
 
-  function initParticles() {
-    particles = [];
-    for (let i = 0; i < 90; i++) {
-      particles.push(new Particle());
-    }
-  }
+        function resize() {
+            w = canvas.width = window.innerWidth;
+            h = canvas.height = window.innerHeight;
+        }
 
-  function animateParticles() {
-    ctx.clearRect(0, 0, w, h);
-    for (let p of particles) {
-      p.update();
-      p.draw(ctx);
-    }
-    requestAnimationFrame(animateParticles);
-  }
 
-  window.addEventListener('resize', () => {
-    resize();
-    initParticles();
-  });
+        class Particle {
+            constructor() {
+                this.reset();
+            }
 
-  window.addEventListener('DOMContentLoaded', () => {
-    resize();
-    initParticles();
-    animateParticles();
-  });
-  document.addEventListener('DOMContentLoaded', () => {
-  const words = ["Antivirus", "Engine", "Privacy", "Security"];
-  const typedText = document.getElementById("typed-text");
-  const cursor = document.getElementById("cursor");
+            reset() {
+                this.x = Math.random() * w;
+                this.y = Math.random() * h;
+                this.r = Math.random() * 1.2 + 0.4;
+                this.dx = (Math.random() - 0.5) * 0.3;
+                this.dy = (Math.random() - 0.5) * 0.3;
+                this.baseAlpha = Math.random() * 0.5 + 0.3;
+                this.alpha = this.baseAlpha;
+                this.phase = Math.random() * Math.PI * 2;
+                this.speed = 0.02 + Math.random() * 0.02;
+            }
 
-  let wordIndex = 0;
-  let charIndex = 0;
-  let typing = true;
+            update() {
+                this.x += this.dx;
+                this.y += this.dy;
+                if (this.x < 0 || this.x > w) this.dx *= -1;
+                if (this.y < 0 || this.y > h) this.dy *= -1;
+                this.phase += this.speed;
+                this.alpha = this.baseAlpha + Math.sin(this.phase) * 0.3;
+            }
 
-  function typeEffect() {
-    const currentWord = words[wordIndex];
+            draw(ctx) {
+                ctx.beginPath();
+                ctx.arc(this.x, this.y, this.r, 0, 2 * Math.PI);
+                ctx.fillStyle = `rgba(255,255,255,${this.alpha})`;
+                ctx.shadowColor = "rgba(255,255,255,0.4)";
+                ctx.shadowBlur = 8;
+                ctx.fill();
+            }
+        }
 
-    if (typing) {
-      if (charIndex < currentWord.length) {
-        typedText.textContent += currentWord.charAt(charIndex);
-        charIndex++;
-        setTimeout(typeEffect, 120);
-      } else {
-        typing = false;
-        setTimeout(typeEffect, 1500);
-      }
-    } else {
-      if (charIndex > 0) {
-        typedText.textContent = currentWord.substring(0, charIndex - 1);
-        charIndex--;
-        setTimeout(typeEffect, 60);
-      } else {
-        typing = true;
-        wordIndex = (wordIndex + 1) % words.length;
-        setTimeout(typeEffect, 400);
-      }
-    }
-  }
+        function initParticles() {
+            particles = [];
+            for (let i = 0; i < 90; i++) {
+                particles.push(new Particle());
+            }
+        }
 
-  typeEffect();
+        function animateParticles() {
+            ctx.clearRect(0, 0, w, h);
+            for (let p of particles) {
+                p.update();
+                p.draw(ctx);
+            }
+            requestAnimationFrame(animateParticles);
+        }
 
-  // Optional blinking cursor
-  setInterval(() => {
-    cursor.style.opacity = cursor.style.opacity === "0" ? "1" : "0";
-  }, 500);
-});
+        window.addEventListener('resize', () => {
+            resize();
+            initParticles();
+        });
 
-</script>
+        window.addEventListener('DOMContentLoaded', () => {
+            resize();
+            initParticles();
+            animateParticles();
+        });
+        document.addEventListener('DOMContentLoaded', () => {
+            const words = ["Antivirus", "Engine", "Privacy", "Security"];
+            const typedText = document.getElementById("typed-text");
+            const cursor = document.getElementById("cursor");
+
+            let wordIndex = 0;
+            let charIndex = 0;
+            let typing = true;
+
+            function typeEffect() {
+                const currentWord = words[wordIndex];
+
+                if (typing) {
+                    if (charIndex < currentWord.length) {
+                        typedText.textContent += currentWord.charAt(charIndex);
+                        charIndex++;
+                        setTimeout(typeEffect, 120);
+                    } else {
+                        typing = false;
+                        setTimeout(typeEffect, 1500);
+                    }
+                } else {
+                    if (charIndex > 0) {
+                        typedText.textContent = currentWord.substring(0, charIndex - 1);
+                        charIndex--;
+                        setTimeout(typeEffect, 60);
+                    } else {
+                        typing = true;
+                        wordIndex = (wordIndex + 1) % words.length;
+                        setTimeout(typeEffect, 400);
+                    }
+                }
+            }
+
+            typeEffect();
+
+            // Optional blinking cursor
+            setInterval(() => {
+                cursor.style.opacity = cursor.style.opacity === "0" ? "1" : "0";
+            }, 500);
+        });
+    </script>
 
 </body>
+
 </html>

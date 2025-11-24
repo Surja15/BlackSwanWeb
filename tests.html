@@ -1,0 +1,560 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Black Swan | Test Records & File Definitions</title>
+    <link href="https://fonts.googleapis.com/css?family=Montserrat:700,400&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <style>
+         :root {
+            --primary: #000000;
+            --secondary: #111111;
+            --accent: #1a1a1a;
+            --highlight: #e94560;
+            --white: #ffffff;
+        }
+        
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+        
+        body {
+            font-family: 'Montserrat', sans-serif;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: var(--white);
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+        
+        .glass-navbar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 60px;
+            backdrop-filter: blur(10px);
+            background: rgba(255, 255, 255, 0.05);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 40px;
+            z-index: 1000;
+            color: var(--white);
+        }
+        
+        .navbar-left {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .navbar-logo {
+            height: 34px;
+            width: auto;
+            object-fit: contain;
+            margin-right: 8px;
+        }
+        
+        .navbar-name {
+            font-size: 1.2rem;
+            font-weight: bold;
+        }
+        
+        .navbar-links {
+            display: flex;
+            gap: 20px;
+        }
+        
+        .navbar-links a {
+            color: var(--white);
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.2s;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .navbar-links a::before {
+            content: "";
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 300%;
+            height: 300%;
+            background: radial-gradient(circle, rgba(255, 255, 255, 0.3) 10%, transparent 10.01%);
+            background-size: 50% 50%;
+            transform: translate(-50%, -50%) scale(0);
+            transition: transform 0.5s ease;
+            border-radius: 50%;
+            pointer-events: none;
+            z-index: 0;
+        }
+        
+        .navbar-links a:hover::before {
+            transform: translate(-50%, -50%) scale(1);
+        }
+        
+        .navbar-links a:hover {
+            color: var(--highlight);
+        }
+        
+        button {
+            position: relative;
+            overflow: hidden;
+            transition: color 0.3s ease;
+        }
+        
+        button::before {
+            content: "";
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 300%;
+            height: 300%;
+            background: radial-gradient(circle, rgba(255, 255, 255, 0.3) 10%, transparent 10.01%);
+            background-size: 50% 50%;
+            transform: translate(-50%, -50%) scale(0);
+            transition: transform 0.5s ease;
+            border-radius: 50%;
+            pointer-events: none;
+            z-index: 0;
+        }
+        
+        button:hover::before {
+            transform: translate(-50%, -50%) scale(1);
+        }
+        
+        .background-animation {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            filter: blur(0.2px);
+            pointer-events: none;
+        }
+        
+        .stars {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            overflow: hidden;
+            pointer-events: none;
+        }
+        
+        .star {
+            position: absolute;
+            width: 2px;
+            height: 2px;
+            background: white;
+            border-radius: 50%;
+            opacity: 0.3;
+            animation: twinkle 2s infinite alternate;
+        }
+        
+        .section {
+            max-width: 1200px;
+            margin: 80px auto 40px auto;
+            padding: 40px 30px;
+            background-color: var(--primary);
+            border-radius: 24px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.25);
+            opacity: 0;
+            transform: translateY(40px);
+            transition: all 0.7s cubic-bezier(.77, 0, .18, 1);
+        }
+        
+        .section.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        
+        .section.animate-down {
+            opacity: 1 !important;
+            transform: translateY(0) scale(1.02);
+            animation: slideDown 0.7s cubic-bezier(.77, 0, .18, 1);
+        }
+        
+        .section.animate-up {
+            opacity: 1 !important;
+            transform: translateY(0) scale(1.02);
+            animation: slideUp 0.7s cubic-bezier(.77, 0, .18, 1);
+        }
+        
+        @keyframes slideDown {
+            from {
+                opacity: 0;
+                transform: translateY(-60px) scale(0.98);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0) scale(1.02);
+            }
+        }
+        
+        @keyframes slideUp {
+            from {
+                opacity: 0;
+                transform: translateY(60px) scale(0.98);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0) scale(1.02);
+            }
+        }
+        
+        @keyframes autoBlur {
+            0%,
+            100% {
+                filter: blur(0);
+            }
+            50% {
+                filter: blur(2px);
+            }
+        }
+        
+        @keyframes twinkle {
+            0% {
+                opacity: 0.1;
+                transform: scale(0.9);
+            }
+            100% {
+                opacity: 1;
+                transform: scale(1.1);
+            }
+        }
+        
+        @keyframes fadeIn {
+            0% {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            100% {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        @keyframes slideIn {
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        .section h2 {
+            color: var(--highlight);
+            text-align: center;
+            font-size: 2.2rem;
+            margin-bottom: 18px;
+            background: linear-gradient(to right, #691902, #eb0808, #d702cc, #fd6094, #eb1b75, #f01a3e, #670202);
+            background-size: 200%;
+            background-clip: text;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            animation: animate-gradient 2.5s linear infinite, autoBlur 5s ease-in-out infinite;
+            margin-bottom: 18px;
+            filter: blur(0);
+            transition: filter 2.5s ease-in-out;
+        }
+        
+        @keyframes animate-gradient {
+            to {
+                background-position: 200%;
+            }
+        }
+        
+        .test-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 24px;
+            background: var(--accent);
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.10);
+        }
+        
+        .test-table th,
+        .test-table td {
+            padding: 16px 12px;
+            text-align: left;
+            color: #fff;
+        }
+        
+        .test-table th {
+            background: var(--highlight);
+            color: #fff;
+            font-weight: bold;
+        }
+        
+        .test-table tr:nth-child(even) {
+            background: #181818;
+        }
+        
+        .test-table tr:nth-child(odd) {
+            background: var(--accent);
+        }
+        
+        .file-defs {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 32px;
+            margin-top: 32px;
+            justify-content: space-between;
+        }
+        
+        .file-box {
+            flex: 1 1 300px;
+            background: var(--accent);
+            border-radius: 16px;
+            padding: 24px;
+            color: var(--white);
+            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.15);
+            margin-bottom: 24px;
+            animation: fadeIn 1.2s ease-in;
+        }
+        
+        .file-box h3 {
+            margin-top: 0;
+            margin-bottom: 12px;
+            color: var(--highlight);
+            font-size: 1.3rem;
+        }
+        
+        .file-box code {
+            color: #00e6e6;
+        }
+        
+        footer {
+            text-align: center;
+            padding: 32px 0;
+            background: var(--secondary);
+            color: #aaa;
+            font-size: 1rem;
+            margin-top: 60px;
+        }
+        
+        @media (max-width: 900px) {
+            .file-defs {
+                flex-direction: column;
+            }
+            .section {
+                padding: 24px 10px;
+            }
+        }
+        
+        @media (max-width: 600px) {
+            .section h2 {
+                font-size: 1.4rem;
+            }
+            .file-box {
+                padding: 14px;
+            }
+            .test-table th,
+            .test-table td {
+                padding: 8px 4px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <header class="glass-navbar">
+        <div class="navbar-left">
+            <img src="logo.png" alt="Logo" class="navbar-logo">
+            <span class="navbar-name">Black Swan</span>
+        </div>
+        <nav class="navbar-links">
+            <a href="index.html">Tech Stack</a>
+            <a href="webutil.html">Web Utilities</a>
+            <a href="tests.html">Tests</a>
+            <a href="https://github.com/Lonestar02/Black-Swan" target="_blank"><i class="fab fa-github"></i></a>
+            <a href="https://twitter.com/hocus_crobat" target="_blank"><i class="fab fa-twitter"></i></a>
+        </nav>
+    </header>
+
+    <canvas class="background-animation"></canvas>
+    <div class="stars" id="stars"></div>
+
+    <section class="section" id="test-records">
+        <h2>Test Records</h2>
+        <table class="test-table">
+            <tr>
+                <th>Date</th>
+                <th>Test Name</th>
+                <th>Result</th>
+                <th>Notes</th>
+            </tr>
+            <tr>
+                <td>2025-07-30</td>
+                <td>EICAR File Detection</td>
+                <td style="color:#00e6e6;">Passed</td>
+                <td>All EICAR test files flagged correctly.</td>
+            </tr>
+            <tr>
+                <td>2025-07-31</td>
+                <td>False Positive Check</td>
+                <td style="color:#00e6e6;">Passed</td>
+                <td>No false positives on clean files.</td>
+            </tr>
+            <tr>
+                <td>2025-08-01</td>
+                <td>Custom YARA Rule</td>
+                <td style="color:#00e6e6;">Passed</td>
+                <td>Custom rule detected test malware sample.</td>
+            </tr>
+            <!-- Add more test records as needed -->
+        </table>
+    </section>
+
+    <!-- <button style="background: var(--highlight); color: var(--white); border: none; border-radius: 30px; padding: 12px 24px; font-size: 1.1rem; font-weight: 600; cursor: pointer; margin-bottom: 24px; position: relative; overflow: hidden;margin-left: 1210px;">Test Button</button> -->
+
+    <section class="section" id="file-definitions">
+        <h2>File Definitions</h2>
+
+        <div class="file-defs">
+            <div class="file-box">
+                <h3><i class="fas fa-dna"></i> <code>yara</code></h3>
+                <p>YARA is an open-source tool used to identify and classify malware by creating rules based on textual or binary patterns. In Black Swan, YARA powers the rule-based detection engine.</p>
+            </div>
+            <div class="file-box">
+                <h3><i class="fas fa-cogs"></i> <code>engine.c</code></h3>
+                <p>The core C file responsible for scanning files, applying YARA rules, and reporting detections. Optimized for speed and low resource usage.</p>
+            </div>
+            <div class="file-box">
+                <h3><i class="fab fa-python"></i> <code>gui.py</code></h3>
+                <p>Python script implementing the graphical user interface using Tkinter. Handles user input, scan controls, and displays results.</p>
+            </div>
+            <div class="file-box">
+                <h3><i class="fas fa-file-alt"></i> <code>rules.yar</code></h3>
+                <p>YARA rule file containing custom detection rules for various malware signatures and behaviors.<br> YARA rules are signature-based detection patterns that help identify malware—viruses, ransomware, Trojans—by matching specific strings,
+                    hex patterns, or binary signatures against files or memory samples.<br> rule ExampleRule<br> {
+                    <br> strings
+
+                    <br> $a="text here"<br> $b={E2 34 A1 C8 23 FB}<br> condition
+                    <br> $a or $b<br> }
+                </p>
+            </div>
+            <!-- Add more file definitions as needed -->
+        </div>
+    </section>
+
+    <footer>
+        &copy; 2025 Black Swan Antivirus. All rights reserved.
+    </footer>
+
+    <script>
+        // Section reveal animation with scroll direction
+        let lastScrollY = window.scrollY;
+        const observer = new IntersectionObserver((entries) => {
+            let direction = window.scrollY > lastScrollY ? 'down' : 'up';
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                    entry.target.classList.remove('animate-up', 'animate-down');
+                    if (direction === 'down') {
+                        entry.target.classList.add('animate-down');
+                    } else {
+                        entry.target.classList.add('animate-up');
+                    }
+                } else {
+                    entry.target.classList.remove('visible', 'animate-up', 'animate-down');
+                }
+            });
+            lastScrollY = window.scrollY;
+        }, {
+            threshold: 0.2
+        });
+
+        document.querySelectorAll('.section').forEach(section => {
+            observer.observe(section);
+        });
+
+        // Particle background animation (same as index.html)
+        const canvas = document.querySelector('.background-animation');
+        const ctx = canvas.getContext('2d');
+        let w, h, particles = [];
+
+        function resize() {
+            w = canvas.width = window.innerWidth;
+            h = canvas.height = window.innerHeight;
+        }
+        class Particle {
+            constructor() {
+                this.reset();
+            }
+            reset() {
+                this.x = Math.random() * w;
+                this.y = Math.random() * h;
+                this.r = Math.random() * 1.2 + 0.4;
+                this.dx = (Math.random() - 0.5) * 0.3;
+                this.dy = (Math.random() - 0.5) * 0.3;
+                this.baseAlpha = Math.random() * 0.5 + 0.3;
+                this.alpha = this.baseAlpha;
+                this.phase = Math.random() * Math.PI * 2;
+                this.speed = 0.02 + Math.random() * 0.02;
+            }
+            update() {
+                this.x += this.dx;
+                this.y += this.dy;
+                if (this.x < 0 || this.x > w) this.dx *= -1;
+                if (this.y < 0 || this.y > h) this.dy *= -1;
+                this.phase += this.speed;
+                this.alpha = this.baseAlpha + Math.sin(this.phase) * 0.3;
+            }
+            draw(ctx) {
+                ctx.beginPath();
+                ctx.arc(this.x, this.y, this.r, 0, 2 * Math.PI);
+                ctx.fillStyle = `rgba(255,255,255,${this.alpha})`;
+                ctx.shadowColor = "rgba(255,255,255,0.4)";
+                ctx.shadowBlur = 8;
+                ctx.fill();
+            }
+        }
+
+        function initParticles() {
+            particles = [];
+            for (let i = 0; i < 90; i++) {
+                particles.push(new Particle());
+            }
+        }
+
+        function animateParticles() {
+            ctx.clearRect(0, 0, w, h);
+            for (let p of particles) {
+                p.update();
+                p.draw(ctx);
+            }
+            requestAnimationFrame(animateParticles);
+        }
+        window.addEventListener('resize', () => {
+            resize();
+            initParticles();
+        });
+        window.addEventListener('DOMContentLoaded', () => {
+            resize();
+            initParticles();
+            animateParticles();
+
+            // Twinkling stars background
+            const starContainer = document.getElementById('stars');
+            const numStars = 150;
+            for (let i = 0; i < numStars; i++) {
+                const star = document.createElement('div');
+                star.className = 'star';
+                star.style.top = `${Math.random() * 100}%`;
+                star.style.left = `${Math.random() * 100}%`;
+                star.style.animationDuration = `${1 + Math.random() * 2}s`;
+                starContainer.appendChild(star);
+            }
+        });
+    </script>
